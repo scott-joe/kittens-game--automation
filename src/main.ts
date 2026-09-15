@@ -226,11 +226,18 @@
 			// take the game down, so each independent piece is isolated in its
 			// own try/catch rather than one guard around the whole block.
 			try {
-				if (typeof game.calendar?.observeStarEvent === "function") {
-					game.calendar.observeStarEvent(); // Auto-observe astronomical events
+				// observeBtn is only set while an astronomical event is actually
+				// pending observation (the game creates it alongside the "Observe
+				// the Sky" message and destroys it in observeClear()). observeHandler
+				// pays out the science/starchart bonus unconditionally whenever
+				// called — verified live it pays out even with nothing pending — so
+				// it must only be called while a button is up, mirroring a manual
+				// click. See docs/decisions/2026-09-15--observe-star-event-does-not-exist.md.
+				if (game.calendar?.observeBtn && typeof game.calendar.observeHandler === "function") {
+					game.calendar.observeHandler();
 				}
 			} catch (err) {
-				console.warn(`${LOG_PREFIX} observeStarEvent failed:`, err);
+				console.warn(`${LOG_PREFIX} observeHandler failed:`, err);
 			}
 
 			for (const resource of managedResources) {

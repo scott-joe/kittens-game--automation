@@ -40,7 +40,15 @@ declare global {
     }
 
     interface Calendar {
-        observeStarEvent(): void;
+        // `observeStarEvent` (the name previously here) does not exist on the
+        // live engine — confirmed via `typeof gamePage.calendar.observeStarEvent`
+        // returning "undefined". observeHandler() is the real function bound to
+        // the in-game "Observe" button; it pays out unconditionally whenever
+        // called (confirmed live: 25 science granted with no event pending), so
+        // callers must gate on observeBtn being set first. See
+        // docs/decisions/2026-09-15--observe-star-event-does-not-exist.md.
+        observeHandler(): void;
+        observeBtn: unknown;
         season: number;
         day: number;
         year: number;
