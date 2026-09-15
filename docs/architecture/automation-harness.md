@@ -82,7 +82,7 @@ Key control points identified for the userscript:
 | Is game paused | `gamePage.isPaused` (the real per-tick early-exit flag, not cosmetic) |
 | Winter-worst-case catnip rate | `gamePage.winterCatnipPerTick` (drives the in-game Food Advisor banner) |
 | Building count/status | `gamePage.bld.get('field').on` |
-| Upgrade status | `gamePage.upgrade.get('mineralHoes').purchased` |
+| Upgrade status | `gamePage.workshop.get('mineralHoes').researched` (not `gamePage.upgrade.get(...).purchased` — `gamePage.upgrade` is a bare constructor function, not a manager with `.get()`; confirmed live 2026-09-15) |
 | Observe star event | `gamePage.calendar.observeStarEvent()` |
 | Free kittens count | `gamePage.village.getFreeKittens()` |
 | Active theme id | `gamePage.colorScheme` (empty string `""` = default theme) |
