@@ -1,0 +1,10 @@
+# Documentation symlink manifest.
+# Format: <canonical-path><TAB><link-path>   (both repo-relative)
+#
+# Canonical docs live in docs/ and are the only place content is edited.
+# Link paths give agents a task-oriented view of the same files.
+#
+# Regenerate:  ./scripts/setup-doc-symlinks.sh
+# Verify:      ./scripts/validate-doc-symlinks.sh .claude
+docs/architecture/automation-harness.md	.claude/rules/automation-harness.md
+docs/guides/local-development.md	.claude/rules/local-development.md

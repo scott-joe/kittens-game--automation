@@ -1,0 +1,24 @@
+/*
+ * Kittens Game Automation — Style amendments
+ * --------------------------------------------
+ * Intended for small, layered tweaks on top of whatever theme the player
+ * currently has active — NOT a full replacement (see override.css for
+ * that). Loaded (when ENABLE_STYLE_AMEND is true in src/main.ts) as a
+ * single <link id="kg-automation-style-amend" rel="stylesheet"> element
+ * appended to <head> after the game engine is confirmed ready.
+ *
+ * The game switches themes by toggling a `scheme_<id>` class on <body>
+ * (e.g. `scheme_dark`), not by swapping stylesheets — all ~27 theme CSS
+ * files are loaded into <head> regardless of which is active. Scope
+ * theme-specific rules the same way the game's own theme CSS does, e.g.:
+ *
+ *   .scheme_dark .btn { ... }
+ *
+ * Rules with no `.scheme_<id>` prefix apply across all themes.
+ *
+ * Gotcha: the game's own updateOptions() strips ALL classes off <body>
+ * before re-adding the active scheme_<id> class, on every options/theme
+ * change — don't rely on any custom marker class persisting on <body>.
+ *
+ * This file ships empty as scaffolding — add rules below as needed.
+ */

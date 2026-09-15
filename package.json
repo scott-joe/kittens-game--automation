@@ -1,0 +1,36 @@
+{
+  "name": "kittens-game-automation",
+  "version": "1.0.0",
+  "description": "Kittens Game automation harness with VSCode development workflow",
+  "main": "src/main.ts",
+  "scripts": {
+    "build": "tsc && node scripts/copy-styles.js",
+    "watch": "tsc --watch",
+    "watch:styles": "node scripts/copy-styles.js --watch",
+    "server": "node server.js",
+    "dev": "concurrently \"pnpm run watch\" \"pnpm run watch:styles\" \"pnpm run server\"",
+    "start": "pnpm run build && pnpm run server",
+    "index-engine-api": "node scripts/index-engine-api.js",
+    "prepare": "git config core.hooksPath .githooks"
+  },
+  "keywords": [
+    "kittens-game",
+    "automation",
+    "userscript",
+    "tampermonkey"
+  ],
+  "author": "scott-joe",
+  "license": "MIT",
+  "engines": {
+    "node": "20.12.1",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@12.3.4",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
+  }
+}

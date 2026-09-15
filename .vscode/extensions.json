@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "ritwickdey.LiveServer",
+    "firsttris.vscode-jest-runner",
+    "dbaeumer.vscode-eslint"
+  ]
+}

@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Keep documentation symlinks correct at commit time.
+#
+# Installed via a TRACKED hooks directory, so every clone gets it:
+#   git config core.hooksPath .githooks
+#
+# Runs only when docs/ or the link roots actually changed, so ordinary commits
+# pay nothing.
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+LINK_ROOTS="${DOC_LINK_ROOTS:-agents}"
+MANIFEST="docs/symlinks.tsv"
+LOG="$(mktemp -t doc-symlinks.XXXXXX)"
+
+YELLOW='\033[1;33m'; GREEN='\033[0;32m'; RED='\033[0;31m'; NC='\033[0m'
+log_info()    { echo -e "${YELLOW}pre-commit:${NC} $1"; }
+log_success() { echo -e "${GREEN}pre-commit:${NC} $1"; }
+log_error()   { echo -e "${RED}pre-commit:${NC} $1" >&2; }
+
+# Build a regex of paths worth reacting to: docs/ plus each link root.
+WATCH_RE="^docs/"
+for root in $LINK_ROOTS; do WATCH_RE="$WATCH_RE|^${root}/"; done
+
+CHANGED="$(git diff --cached --name-only --diff-filter=ACMR | grep -E "$WATCH_RE" || true)"
+
+if [[ -n "$CHANGED" ]]; then
+  log_info "Documentation changed, refreshing symlinks..."
+
+  if [[ -f "$MANIFEST" ]] && [[ -x scripts/setup-doc-symlinks.sh ]]; then
+    if ! scripts/setup-doc-symlinks.sh "$MANIFEST" > "$LOG" 2>&1; then
+      log_error "Failed to refresh symlinks. See: $LOG"
+      exit 1
+    fi
+    # Stage regenerated links so the commit is self-consistent.
+    for root in $LINK_ROOTS; do git add "$root" 2>/dev/null || true; done
+    log_success "Symlinks refreshed"
+  fi
+fi
+
+# Always validate, even when nothing in docs/ changed: a symlink can break
+# because its target was deleted or moved by an unrelated commit.
+if [[ -x scripts/validate-doc-symlinks.sh ]]; then
+  # shellcheck disable=SC2086  # LINK_ROOTS is intentionally word-split
+  if ! scripts/validate-doc-symlinks.sh $LINK_ROOTS > "$LOG" 2>&1; then
+    log_error "Symlink validation failed:"
+    cat "$LOG" >&2
+    exit 1
+  fi
+  log_success "Symlinks validated"
+fi
+
+rm -f "$LOG"
+exit 0

@@ -1,0 +1,13 @@
+/*
+ * Kittens Game Automation — Full style override
+ * -----------------------------------------------
+ * Intended for a full-page look replacement: rules here are meant to
+ * substantially replace the game's visual presentation rather than tweak
+ * it. Loaded (when ENABLE_STYLE_OVERRIDE is true in src/main.ts) as a
+ * single <link id="kg-automation-style-override" rel="stylesheet"> element
+ * appended to <head> after the game engine is confirmed ready, so it lands
+ * after the game's own default.css/theme CSS in the DOM and wins ties in
+ * the cascade at equal specificity.
+ *
+ * This file ships empty as scaffolding — add rules below as needed.
+ */
