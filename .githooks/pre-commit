@@ -14,7 +14,7 @@ cd "$REPO_ROOT"
 
 LINK_ROOTS="${DOC_LINK_ROOTS:-agents}"
 MANIFEST="docs/symlinks.tsv"
-LOG="$(mktemp -t doc-symlinks.XXXXXX)"
+LOG="$(mktemp "${TMPDIR:-/tmp}/doc-symlinks.XXXXXX")"
 
 YELLOW='\033[1;33m'; GREEN='\033[0;32m'; RED='\033[0;31m'; NC='\033[0m'
 log_info()    { echo -e "${YELLOW}pre-commit:${NC} $1"; }
