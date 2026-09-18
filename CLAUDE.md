@@ -25,4 +25,5 @@ See `.claude/rules/automation-harness.md` (symlinked from `docs/architecture/`, 
 
 - Write a dated file in `docs/decisions/` for notable bugs/investigations, following the `sprout-standards:adr` naming convention (`YYYY-MM-DD--kebab-topic.md`) — see existing files there for the pattern: what happened, root cause, fix.
 - `docs/otel-monitoring/` holds a *planned but unimplemented* OpenTelemetry instrumentation design (5-doc series). Don't assume any of it (including a proposed esbuild build-pipeline switch in doc 4) is actually in place — current build is plain `tsc`, current logging is `console.log`/`warn`.
+- `docs/automation-console/` holds a *planned but unimplemented* design for a runtime automation toggle UI, named workflow presets, and a goal-directed job-optimization planner (6-doc series). Don't assume any of it is in place — automations are still hardcoded consts/arrays in `src/main.ts` today.
 - The sibling checkout `/Users/scott/Dev/sprout-garden/gym--kittens-game/_old/kitten-game--orig` has the game's own source but may be an older build than what's live — treat as reference only, verify against the live site when in doubt.
