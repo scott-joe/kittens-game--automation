@@ -12,6 +12,7 @@ Use `navigate_page` (type `url`, `url: "https://kittensgame.com/web/"`) with thi
   const SCRIPT_URL = "http://127.0.0.1:5500/main.js";
   const inject = () => {
     const script = document.createElement("script");
+    script.type = "module";
     script.src = SCRIPT_URL;
     script.onload = () => console.log("[Kittens Automation] Loader: Script loaded successfully");
     script.onerror = () => console.error(`[Kittens Automation] Loader: Failed to load script from ${SCRIPT_URL}`);

@@ -12,6 +12,7 @@
 	const SCRIPT_URL = "http://127.0.0.1:5500/main.js";
 
 	const script = document.createElement("script");
+	script.type = "module";
 	// Served by this project's own dev server (`pnpm run dev` / `pnpm run server`),
 	// which serves the dist/ folder as its web root — see server.js.
 	script.src = SCRIPT_URL;

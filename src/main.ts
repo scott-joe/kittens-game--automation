@@ -1,7 +1,7 @@
 // Kittens Game Automation Harness
-(() => {
-	const LOG_PREFIX = "😻 [kg-automation]";
+import { LOG_PREFIX, DANGER_ZONE_THRESHOLD } from "./automation-config.js";
 
+(() => {
 	// --- Custom style loader config -------------------------------------
 	// Toggle fetching+injecting our own CSS files. See src/styles/*.css and
 	// docs/architecture/automation-harness.md.
@@ -93,10 +93,6 @@
 				console.log(`${LOG_PREFIX} amend style active; theme scheme: "${game.colorScheme || "default"}"`);
 			});
 		}
-
-		// Craft a resource into its next-tier good once it nears its storage cap,
-		// so production doesn't stall while waiting for a manual check-in.
-		const DANGER_ZONE_THRESHOLD = 0.9;
 
 		interface ManagedResource {
 			name: string;
