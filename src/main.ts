@@ -1,6 +1,7 @@
 // Kittens Game Automation Harness
 import { LOG_PREFIX } from "./automation-config.js";
 import { createRegistry } from "./automations/registry.js";
+import { installConsoleApi } from "./automations/console-api.js";
 
 (() => {
 	// --- Custom style loader config -------------------------------------
@@ -96,6 +97,7 @@ import { createRegistry } from "./automations/registry.js";
 		}
 
 		const registry = createRegistry(game);
+		installConsoleApi(registry);
 
 		const originalTick = game.tick;
 		game.tick = function (...args: any[]) {

@@ -251,6 +251,7 @@ declare global {
     interface Window {
         gamePage?: GameEngine;
         game?: GameEngine;
+        kgAutomation?: import("./automations/console-api").AutomationConsoleAPI;
     }
 }
 
