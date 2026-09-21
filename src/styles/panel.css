@@ -1,0 +1,69 @@
+/*
+ * Kittens Game Automation — Toggle panel
+ * ---------------------------------------
+ * Styles the floating automation-toggle panel injected by
+ * src/automations/panel.ts. Loaded (when ENABLE_TOGGLE_PANEL is true in
+ * src/main.ts) as a single <link id="kg-automation-style-panel"
+ * rel="stylesheet"> element appended to <head> after the game engine is
+ * confirmed ready, same as amend.css/override.css.
+ *
+ * Scoped entirely under #kg-automation-panel so it can't leak into or
+ * collide with the game's own styles.
+ */
+
+#kg-automation-panel {
+	/* top clears the game's own #topBar (Save/Options/Reset/Wipe/...),
+	   which measures ~29px tall live — verified against the live site,
+	   not assumed. */
+	position: fixed;
+	top: 36px;
+	right: 8px;
+	z-index: 9999;
+	width: 220px;
+	max-height: 80vh;
+	overflow-y: auto;
+	background: rgba(20, 20, 20, 0.85);
+	color: #eee;
+	font-family: sans-serif;
+	font-size: 12px;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+#kg-automation-panel-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 6px 8px;
+	cursor: pointer;
+	font-weight: bold;
+	user-select: none;
+}
+
+#kg-automation-panel-body {
+	padding: 0 8px 8px;
+}
+
+#kg-automation-panel-body.kg-automation-collapsed {
+	display: none;
+}
+
+#kg-automation-panel ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#kg-automation-panel li {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 2px 0;
+}
+
+#kg-automation-panel label {
+	cursor: pointer;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
