@@ -2,6 +2,7 @@
 import { LOG_PREFIX } from "./automation-config.js";
 import { createRegistry } from "./automations/registry.js";
 import { installConsoleApi } from "./automations/console-api.js";
+import { installPanel } from "./automations/panel.js";
 
 (() => {
 	// --- Custom style loader config -------------------------------------
@@ -9,6 +10,7 @@ import { installConsoleApi } from "./automations/console-api.js";
 	// docs/architecture/automation-harness.md.
 	const ENABLE_STYLE_OVERRIDE = false; // full page look replacement (src/styles/override.css)
 	const ENABLE_STYLE_AMEND = true; // small layered tweaks over the active theme (src/styles/amend.css)
+	const ENABLE_TOGGLE_PANEL = true; // floating automation on/off panel (src/styles/panel.css)
 	const STYLE_BASE_URL = "http://127.0.0.1:5500/styles";
 
 	// The loader script injects us as soon as it's appended to <body>, which can
@@ -98,6 +100,12 @@ import { installConsoleApi } from "./automations/console-api.js";
 
 		const registry = createRegistry(game);
 		installConsoleApi(registry);
+
+		if (ENABLE_TOGGLE_PANEL) {
+			loadAndInjectStyle(`${STYLE_BASE_URL}/panel.css`, "kg-automation-style-panel", () => {
+				installPanel(registry);
+			});
+		}
 
 		const originalTick = game.tick;
 		game.tick = function (...args: any[]) {
