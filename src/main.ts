@@ -102,9 +102,14 @@ import { installPanel } from "./automations/panel.js";
 		installConsoleApi(registry);
 
 		if (ENABLE_TOGGLE_PANEL) {
-			loadAndInjectStyle(`${STYLE_BASE_URL}/panel.css`, "kg-automation-style-panel", () => {
-				installPanel(registry);
-			});
+			// Installed independently of the stylesheet load: the panel is a
+			// functional control surface, not a cosmetic add-on, so a failed
+			// panel.css fetch (dev server down, network hiccup) shouldn't also
+			// take out the ability to toggle automations — it'd just render
+			// unstyled, same "degrade, don't block" spirit as the other
+			// loadAndInjectStyle callers.
+			loadAndInjectStyle(`${STYLE_BASE_URL}/panel.css`, "kg-automation-style-panel");
+			installPanel(registry);
 		}
 
 		const originalTick = game.tick;

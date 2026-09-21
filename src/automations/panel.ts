@@ -1,5 +1,5 @@
 import { LOG_PREFIX } from "../automation-config.js";
-import { AutomationEntry, setEnabled } from "./registry.js";
+import { AutomationEntry, onAutomationChange, setEnabled } from "./registry.js";
 
 const PANEL_ID = "kg-automation-panel";
 
@@ -35,6 +35,11 @@ export function installPanel(registry: AutomationEntry[]): void {
 			body.classList.toggle("kg-automation-collapsed");
 		});
 
+		// Tracked so onAutomationChange (below) can update the right checkbox
+		// when a change comes from elsewhere (console API, another panel
+		// instance) instead of from this checkbox's own "change" event.
+		const checkboxesById = new Map<string, HTMLInputElement>();
+
 		const list = document.createElement("ul");
 		for (const entry of registry) {
 			const item = document.createElement("li");
@@ -47,6 +52,7 @@ export function installPanel(registry: AutomationEntry[]): void {
 			checkbox.addEventListener("change", () => {
 				setEnabled(registry, entry.id, checkbox.checked);
 			});
+			checkboxesById.set(entry.id, checkbox);
 
 			const label = document.createElement("label");
 			label.htmlFor = checkboxId;
@@ -61,6 +67,16 @@ export function installPanel(registry: AutomationEntry[]): void {
 		panel.appendChild(header);
 		panel.appendChild(body);
 		document.body.appendChild(panel);
+
+		// Keeps this panel's checkboxes in sync with changes made through
+		// window.kgAutomation.toggle() (or any other setEnabled() caller),
+		// not just changes originating from this panel's own checkboxes.
+		onAutomationChange((id, enabled) => {
+			const checkbox = checkboxesById.get(id);
+			if (checkbox && checkbox.checked !== enabled) {
+				checkbox.checked = enabled;
+			}
+		});
 
 		console.log(`${LOG_PREFIX} toggle panel installed (${registry.length} entries)`);
 	} catch (err) {

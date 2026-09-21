@@ -7,6 +7,23 @@ export interface AutomationEntry {
 	run: () => void;
 }
 
+export type AutomationChangeListener = (id: string, enabled: boolean) => void;
+
+// Module-level rather than attached to the registry array itself: there's
+// only ever one registry per page load (createRegistry runs once in
+// init()), same singleton assumption window.kgAutomation already makes.
+const changeListeners: AutomationChangeListener[] = [];
+
+/**
+ * Subscribe to setEnabled() calls from ANY caller (console API, DOM panel,
+ * or otherwise), so consumers with their own rendered state — the panel's
+ * checkboxes — can stay in sync without each caller having to know about
+ * every other UI surface.
+ */
+export function onAutomationChange(listener: AutomationChangeListener): void {
+	changeListeners.push(listener);
+}
+
 interface ManagedResourceDef {
 	name: string;
 	resKey: string;
@@ -171,5 +188,18 @@ export function setEnabled(registry: AutomationEntry[], id: string, enabled: boo
 	}
 	entry.enabled = enabled;
 	console.log(`${LOG_PREFIX} "${id}" ${enabled ? "enabled" : "disabled"}`);
+
+	// Isolated per-listener: a broken UI subscriber (e.g. the panel failing
+	// to find its checkbox) must not make toggle() itself appear to fail,
+	// mirroring the tick loop's per-entry try/catch convention elsewhere in
+	// this codebase.
+	for (const listener of changeListeners) {
+		try {
+			listener(id, enabled);
+		} catch (err) {
+			console.warn(`${LOG_PREFIX} automation-change listener failed:`, err);
+		}
+	}
+
 	return true;
 }
